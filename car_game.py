@@ -1,6 +1,8 @@
 #Imports
 import pygame
 from pygame.locals import *
+import math
+import random
 
 # Initialise imported pygame modules
 pygame.init()
@@ -17,6 +19,12 @@ pygame.display.set_caption('Car game')
 bg = pygame.image.load('road_bg.png').convert()
 bg_width = bg.get_width()
 
+FPS = 60
+clock = pygame.time.Clock()
+
+tiles = math.ceil(SCREEN_WIDTH / bg_width) + 1
+scroll = 0
+
 # Variables
 x, y = 100, 100
 move_x, move_y = 0, 0
@@ -26,6 +34,8 @@ height = 10
 
 vel = 5
 
+score = 0
+
 #car
 img = pygame.image.load('car.png')
 img.convert()
@@ -33,12 +43,39 @@ img.convert()
 rect = img.get_rect()
 rect.center = x, y
 
+# Obstacles
+obstaclesx = [300,550,725,760]
+obstaclesy = [100,270,320,450]
+coinx = [550,775]
+coiny = [250,370]
+
+obstacles_speed = 10
+active = True
 
 running = True
 
 while running:
     pygame.time.delay(10)
-    screen.blit(bg, (0, 0))
+
+    clock.tick(FPS)
+
+    # draw scrolling background
+    for i in range(0, tiles):
+        screen.blit(bg, ((i * bg_width + scroll), 0))
+
+    # scroll background
+    scroll -= 5
+
+    # reset scroll
+    if abs(scroll) > bg_width:
+        scroll = 0
+
+    # Draw obstacles
+    obstacle0 = pygame.draw.rect(screen, (255, 0, 0), [obstaclesx[0], obstaclesy[0], 20, 20])  # x,y,width, height
+    obstacle1 = pygame.draw.rect(screen, (0, 255, 0), [obstaclesx[1], obstaclesy[1], 20, 20])
+    obstacle2 = pygame.draw.rect(screen, (0, 0, 255), [obstaclesx[2], obstaclesy[2], 20, 20])
+    obstacle3 = pygame.draw.rect(screen, (255, 255, 255), [obstaclesx[3], obstaclesy[3], 20, 20])
+
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -56,6 +93,24 @@ while running:
         y -= vel
     elif keys[pygame.K_DOWN] and y<SCREEN_HEIGHT-height:
         y += vel
+
+
+    # Obstacles loop
+    for i in range(len(obstaclesx)):
+        if active:
+            obstaclesx[i] -= obstacles_speed
+            if obstaclesx[i] < -10:
+                obstaclesx[i] = random.randint(600, 800)
+                obstaclesy[i] = random.randint(0, 500)
+                pygame.time.delay(10)
+                score += 1
+            if (rect.colliderect(obstacle0) or rect.colliderect(obstacle1) or rect.colliderect(
+                    obstacle2) or rect.colliderect(obstacle3)):
+                screen.fill((255, 0, 0))
+                pygame.display.flip()
+                score -= 1
+            if score < -300:
+                active = False
 
     # Car
     img = pygame.image.load('car.png')
