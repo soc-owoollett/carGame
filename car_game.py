@@ -1,15 +1,12 @@
-#Imports
+# Imports
 import pygame
 from pygame.locals import *
 import math
 import random
+from settings import *
 
 # Initialise imported pygame modules
 pygame.init()
-
-# Screen width and height
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 500
 
 # Set up window
 screen = pygame.display.set_mode([SCREEN_WIDTH,SCREEN_HEIGHT])
@@ -19,22 +16,10 @@ pygame.display.set_caption('Car game')
 bg = pygame.image.load('road_bg.png').convert()
 bg_width = bg.get_width()
 
-FPS = 60
 clock = pygame.time.Clock()
 
 tiles = math.ceil(SCREEN_WIDTH / bg_width) + 1
 scroll = 0
-
-# Variables
-x, y = 100, 100
-move_x, move_y = 0, 0
-
-width = 10
-height = 10
-
-vel = 5
-
-score = 0
 
 #car
 img = pygame.image.load('car.png')
@@ -42,17 +27,6 @@ img.convert()
 
 rect = img.get_rect()
 rect.center = x, y
-
-# Obstacles
-obstaclesx = [300,550,725,760]
-obstaclesy = [100,270,320,450]
-coinx = [550,775]
-coiny = [250,370]
-
-obstacles_speed = 10
-active = True
-
-running = True
 
 while running:
     pygame.time.delay(10)
