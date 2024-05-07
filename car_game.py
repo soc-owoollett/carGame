@@ -50,6 +50,10 @@ while running:
     obstacle2 = pygame.draw.rect(screen, (0, 0, 255), [obstaclesx[2], obstaclesy[2], 20, 20])
     obstacle3 = pygame.draw.rect(screen, (255, 255, 255), [obstaclesx[3], obstaclesy[3], 20, 20])
 
+    # Coins
+    coin0 = pygame.draw.rect(screen, (252, 186, 3), [coinx[0], coiny[0], 20, 20])  # x,y,width, height
+    coin1 = pygame.draw.rect(screen, (252, 186, 3), [coinx[1], coiny[1], 20, 20])
+
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -85,6 +89,18 @@ while running:
                 score -= 1
             if score < -300:
                 active = False
+
+    # Coins loop
+    for i in range(len(coinx)):
+        if active:
+            coinx[i] -= obstacles_speed
+            if coinx[i] < -20:
+                coinx[i] = random.randint(300, 800)
+                coiny[i] = random.randint(0, 500)
+            if rect.colliderect(coin0) or rect.colliderect(coin1):
+                coins += 1
+                print(coins)
+
 
     # Car
     img = pygame.image.load('car.png')
