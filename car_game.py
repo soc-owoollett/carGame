@@ -8,6 +8,13 @@ from settings import *
 # Initialise imported pygame modules
 pygame.init()
 
+# Functions
+
+def draw_text(text,font,colour,x,y):
+    txt = font.render(text, True, colour)
+    screen.blit(txt,(x,y))
+
+
 # Set up window
 screen = pygame.display.set_mode([SCREEN_WIDTH,SCREEN_HEIGHT])
 pygame.display.set_caption('Car game')
@@ -99,7 +106,6 @@ while running:
                 coiny[i] = random.randint(0, 500)
             if rect.colliderect(coin0) or rect.colliderect(coin1):
                 coins += 1
-                print(coins)
 
 
     # Car
@@ -111,6 +117,10 @@ while running:
 
     screen.blit(img, rect)
 
+    text_font = pygame.font.SysFont("Arial", 30)
+
+    draw_text("Score: {}".format(score), text_font, (0, 0, 0), SCREEN_WIDTH-(100 + 10 * len(str(score))), SCREEN_HEIGHT-40)
+    draw_text("Coins: {}".format(coins), text_font, (0, 0, 0), 20, SCREEN_HEIGHT-40)
 
     pygame.display.flip()
 
