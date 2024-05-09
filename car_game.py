@@ -58,8 +58,18 @@ while running:
     obstacle3 = pygame.draw.rect(screen, (255, 255, 255), [obstaclesx[3], obstaclesy[3], 20, 20])
 
     # Coins
-    coin0 = pygame.draw.rect(screen, (252, 186, 3), [coinx[0], coiny[0], 20, 20])  # x,y,width, height
-    coin1 = pygame.draw.rect(screen, (252, 186, 3), [coinx[1], coiny[1], 20, 20])
+    coin_img = pygame.image.load('coin_img.png')
+    coin_img.convert()
+
+    # coin0
+    coin0 = coin_img.get_rect()
+    coin0.center = (coinx[0], coiny[0])
+    screen.blit(coin_img, coin0)
+
+    # coin1
+    coin1 = coin_img.get_rect()
+    coin1.center = (coinx[1], coiny[1])
+    screen.blit(coin_img, coin1)
 
 
     for event in pygame.event.get():
@@ -86,7 +96,7 @@ while running:
             obstaclesx[i] -= obstacles_speed
             if obstaclesx[i] < -10:
                 obstaclesx[i] = random.randint(600, 800)
-                obstaclesy[i] = random.randint(0, 500)
+                obstaclesy[i] = random.choice((90,200,290,400))
                 pygame.time.delay(10)
                 score += 1
             if (rect.colliderect(obstacle0) or rect.colliderect(obstacle1) or rect.colliderect(
@@ -103,7 +113,7 @@ while running:
             coinx[i] -= obstacles_speed
             if coinx[i] < -20:
                 coinx[i] = random.randint(300, 800)
-                coiny[i] = random.randint(0, 500)
+                coiny[i] = random.choice((90,200,290,400))   # in line coordinates - 90, 200, 290, 400
             if rect.colliderect(coin0) or rect.colliderect(coin1):
                 coins += 1
 
