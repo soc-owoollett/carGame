@@ -51,11 +51,41 @@ while running:
     if abs(scroll) > bg_width:
         scroll = 0
 
+
     # Draw obstacles
-    obstacle0 = pygame.draw.rect(screen, (255, 0, 0), [obstaclesx[0], obstaclesy[0], 20, 20])  # x,y,width, height
-    obstacle1 = pygame.draw.rect(screen, (0, 255, 0), [obstaclesx[1], obstaclesy[1], 20, 20])
-    obstacle2 = pygame.draw.rect(screen, (0, 0, 255), [obstaclesx[2], obstaclesy[2], 20, 20])
-    obstacle3 = pygame.draw.rect(screen, (255, 255, 255), [obstaclesx[3], obstaclesy[3], 20, 20])
+
+    # car0
+    green_car_img = pygame.image.load('green_car.png')
+    green_car_img.convert()
+
+    car0 = green_car_img.get_rect()
+    car0.center = (obstaclesx[0], obstaclesy[0])
+    screen.blit(green_car_img, car0)
+
+    # car1
+    blue_car_img = pygame.image.load('blue_car.png')
+    blue_car_img.convert()
+
+    car1 = blue_car_img.get_rect()
+    car1.center = (obstaclesx[1], obstaclesy[1])
+    screen.blit(blue_car_img, car1)
+
+    # car2
+    truck_img = pygame.image.load('truck.png')
+    truck_img.convert()
+
+    car2 = truck_img.get_rect()
+    car2.center = (obstaclesx[2], obstaclesy[2])
+    screen.blit(truck_img, car2)
+
+    # car3
+    cop_car_img = pygame.image.load('cop_car.png')
+    cop_car_img.convert()
+
+    car3 = cop_car_img.get_rect()
+    car3.center = (obstaclesx[3], obstaclesy[3])
+    screen.blit(cop_car_img, car3)
+
 
     # Coins
     coin_img = pygame.image.load('coin_img.png')
@@ -99,8 +129,8 @@ while running:
                 obstaclesy[i] = random.choice((90,200,290,400))
                 pygame.time.delay(10)
                 score += 1
-            if (rect.colliderect(obstacle0) or rect.colliderect(obstacle1) or rect.colliderect(
-                    obstacle2) or rect.colliderect(obstacle3)):
+            if (rect.colliderect(car0) or rect.colliderect(car1) or rect.colliderect(
+                    car2) or rect.colliderect(car3)):
                 screen.fill((255, 0, 0))
                 pygame.display.flip()
                 score -= 1
