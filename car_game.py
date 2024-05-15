@@ -120,6 +120,8 @@ while running:
         y += vel
 
 
+    invulnerable -= 1
+
     # Obstacles loop
     for i in range(len(obstaclesx)):
         if active:
@@ -128,12 +130,13 @@ while running:
                 obstaclesx[i] = random.randint(600, 800)
                 obstaclesy[i] = random.choice((90,200,290,400))
                 pygame.time.delay(10)
-                score += 1
+                #score += 1
             if (rect.colliderect(car0) or rect.colliderect(car1) or rect.colliderect(
-                    car2) or rect.colliderect(car3)):
+                    car2) or rect.colliderect(car3)) and invulnerable <= 0:
                 screen.fill((255, 0, 0))
                 pygame.display.flip()
                 score -= 1
+                invulnerable = 20
             if score < -300:
                 active = False
 
