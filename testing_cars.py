@@ -20,10 +20,6 @@ def current_car_stats():
             print(f"{delay}")
             return vel, delay
 
-vel, delay = current_car_stats()
-
-print(f"Delay:{vel}")
-print(f"Speed:{delay}")
 
 class Button:
     def __init__(self, x, y, image, scale, screen):
@@ -87,27 +83,17 @@ def menu(coins):
 
 
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption('Button Example')
 
-play_btn = pygame.image.load('play_btn.png').convert_alpha()
-btn = Button(400,400, play_btn,1, screen)
-pygame.display.flip()
 
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-    # Clear screen
-    screen.fill((255, 255, 255))
+def buy_car(car):
+    for key, nested_dict in all_cars.items():
+        if 'model' in nested_dict and nested_dict['model'] == car:
+            price = nested_dict['price']
+            owned = nested_dict['owned']
+            current = nested_dict['current']
+            return price, owned, current
 
-    # Draw the button and check for clicks
-    if btn.draw():
-        print("Button clicked!")  # Example action upon button click
-
-    # Update display
-    pygame.display.flip()
-
+price, owned, current = buy_car("wrx")
+print(price,owned,current)
 pygame.quit()

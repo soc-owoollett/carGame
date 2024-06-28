@@ -29,6 +29,7 @@ class Button:
         self.rect.topleft = (x,y)
         self.clicked = False
 
+
     def draw(self):
         action = False
         pos = pygame.mouse.get_pos()
@@ -42,7 +43,6 @@ class Button:
 
         screen.blit(self.image, (self.x, self.y))
         return action
-
 
 
 class Game:
@@ -138,6 +138,8 @@ class Play:
         # car
         img = pygame.image.load('car.png')
         img.convert()
+
+        damaged = 0
 
         rect = img.get_rect()
         rect.center = x, y
@@ -264,6 +266,7 @@ class Play:
                 draw_text("Game Over", bigger_font, (0, 0, 0), 200, 150)
                 pygame.display.flip()
 
+
             # Car
             img = pygame.image.load('car.png')
             img.convert()
@@ -280,6 +283,7 @@ class Play:
             pygame.display.flip()
         pygame.quit()
 
+
 class Menu:
     def __init__(self, display, game_state_manager):
         self.display = display
@@ -288,10 +292,6 @@ class Menu:
         self.display.fill((255,0,0))
         pygame.display.set_caption("Main Menu screen")
         text_font = pygame.font.SysFont("Arial", 30)
-
-        def draw_text(text, font, colour, x, y):
-            txt = font.render(text, True, colour)
-            screen.blit(txt, (x, y))
 
         draw_text("This is the main menu", text_font, (0, 0, 0), 100, 100)
 
@@ -303,6 +303,8 @@ class Cars:
     def run(self): #For the cars screen--------
         self.display.fill((0,255,0))
         pygame.display.set_caption("Cars screen")
+        text_font = pygame.font.SysFont("Arial", 30)
+        draw_text("This is the cars screen", text_font, (0, 0, 0), 100, 100)
 
 
 class Game_state_manager:
