@@ -1,3 +1,5 @@
+import pygame
+pygame.init()
 
 active = True
 running = True
@@ -17,6 +19,8 @@ move_x, move_y = 0, 0
 
 width = 10
 height = 10
+
+text_font = pygame.font.SysFont("Arial", 30)
 
 score = 3
 coins = 0
@@ -40,7 +44,7 @@ all_cars = {
     "year": "2022",
     "speed": 15,
     "delay": 0,
-    "price": 20,
+    "price": 100,
     "owned": False,
     "current": False,
     "car_img": '911_car.png',
@@ -54,9 +58,9 @@ all_cars = {
     "year": "2013",
     "speed": 10,
     "delay": 10,
-    "price": 20,
-    "owned": True,
-    "current": True,
+    "price": 50,
+    "owned": False,
+    "current": False,
     "car_img": 'wrx_car.png',
     "dmg_1": 'wrx_dmg_1.png',
     "dmg_2": 'wrx_dmg_2.png',
@@ -68,9 +72,9 @@ all_cars = {
     "year": "2013",
     "speed": 8,
     "delay": 20,
-    "price": 20,
+    "price": 40,
     "owned": True,
-    "current": False,
+    "current": True,
     "car_img": 'corolla_car.png',
     "dmg_1": 'corolla_dmg_1.png',
     "dmg_2": 'corolla_dmg_2.png',

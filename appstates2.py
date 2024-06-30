@@ -62,6 +62,7 @@ def buy_car(car):
 
 
 def menu(coins):
+    global total_coins, text_font
 
     pygame.display.set_caption("Main Menu screen")
 
@@ -72,12 +73,9 @@ def menu(coins):
     cars_img = pygame.image.load('cars_btn.png').convert_alpha()
     cars_btn = Button((SCREEN_WIDTH/2)-95, (SCREEN_HEIGHT / 2), cars_img, 1, screen)
 
-    text_font = pygame.font.SysFont("Arial", 30)
-    heading1 = pygame.font.SysFont("Arial", 40)
-
     # Coins
-    global total_coins
     total_coins += coins
+    coins = 0   #reset coins value
 
     background = pygame.image.load('main_menu_bg.jpg').convert_alpha()
     screen.blit(background, (0, 0))
@@ -99,18 +97,18 @@ def menu(coins):
                 if event.key == K_ESCAPE:
                     pygame.quit()
                 if event.key == K_c:
-                    cars(coins, total_coins)
+                    cars(coins)
+                elif event.key == K_p:
+                    play()
+
 
         # Draw the button and check for clicks
-
         if play_btn.draw():
-            print("playyyy")
             play()
             running = False
 
         elif cars_btn.draw():
-            print("cars")
-            cars(coins, total_coins)
+            cars(coins)
             running = False
 
 
@@ -120,28 +118,12 @@ def menu(coins):
 
 
 def play():
-    global SCREEN_WIDTH, SCREEN_HEIGHT, FPS, invulnerable, collecting, obstaclesx, obstaclesy, obstacles_speed
+    global SCREEN_WIDTH, SCREEN_HEIGHT, FPS, invulnerable, collecting, obstaclesx, obstaclesy, obstacles_speed, \
+        active, running, score, coins, x, y, move_x, move_y, width, height, coinx, coiny, text_font
+
     pygame.display.set_caption("Play screen")
 
-    active = True
-    running = True
-
-    # Variables
-    score = 3
-    coins = 0
-    x, y = 100, 100
-    move_x, move_y = 0, 0
-
-    width = 10
-    height = 10
-
     vel, delay, car_img, dmg_1, dmg_2, dmg_3 = current_car_stats()
-
-    # Coins
-    coinx = [550, 775]
-    coiny = [200, 290]
-
-    #obstacles_speed = 10
 
     # Set up window
     pygame.display.set_caption('Car game')
@@ -163,9 +145,6 @@ def play():
 
     rect = img.get_rect()
     rect.center = x, y
-
-    text_font = pygame.font.SysFont("Arial", 30)
-    bigger_font = pygame.font.SysFont("Arial", 80)
 
     while running:
 
@@ -237,11 +216,10 @@ def play():
                 if event.key == K_ESCAPE:
                     running = False
                 elif event.key == K_c:
-                    cars(coins, total_coins)
+                    cars(coins)
                 elif event.key == K_m:
                     menu(coins)
-                elif event.key == K_p:
-                    play()
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and x > 0:
             x -= vel
@@ -264,14 +242,6 @@ def play():
             obstacles_speed = 30
         elif coins >= 40:
             obstacles_speed = 40
-        elif coins >= 50:
-            obstacles_speed = 80
-        elif coins >= 60:
-            obstacles_speed = 100
-        elif coins >= 70:
-            obstacles_speed = 120
-        elif coins >= 80:
-            obstacles_speed = 140
 
         obstacle_sfx = pygame.mixer.Sound("obstacle_sfx.mp3")
         coin_sfx = pygame.mixer.Sound("coins_sfx.mp3")
@@ -345,11 +315,10 @@ def play():
         pygame.display.flip()
 
     pygame.quit()
-    return coins
 
 
-def cars(coins, total_coins):
-
+def cars(coins):
+    global total_coins, text_font
     pygame.display.set_caption("Cars screen")
 
     menu_img = pygame.image.load('menu_btn.png').convert_alpha()
@@ -359,11 +328,8 @@ def cars(coins, total_coins):
     play_btn = Button(15, 80, play_img, 0.75, screen)
 
     #Car buy and select buttons
-    corolla_buy_img = pygame.image.load('buy_btn.png').convert_alpha()
-    corolla_buy_btn = Button(50, 400, corolla_buy_img, 0.5, screen)
-
     corolla_select_img = pygame.image.load('select_btn.png').convert_alpha()
-    corolla_select_btn = Button(150, 400, corolla_select_img, 0.5, screen)
+    corolla_select_btn = Button(80, 400, corolla_select_img, 0.5, screen)
 
     wrx_buy_img = pygame.image.load('buy_btn.png').convert_alpha()
     wrx_buy_btn = Button(300, 400, wrx_buy_img, 0.5, screen)
@@ -386,11 +352,13 @@ def cars(coins, total_coins):
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     pygame.quit()
+                elif event.key == K_m:
+                    menu(coins)
+                elif event.key == K_p:
+                    play()
 
         cars_bg = pygame.image.load("cars_garage_bg.jpg").convert_alpha()
         screen.blit(cars_bg, (0,0))
-
-        text_font = pygame.font.SysFont("Arial", 30)
 
         cars_heading = pygame.image.load("cars_page_img.png").convert_alpha()
         screen.blit(cars_heading, (260, 40))
@@ -404,46 +372,27 @@ def cars(coins, total_coins):
         _911_img = pygame.image.load('911_img.png').convert_alpha()
         screen.blit(_911_img, (510, 240))
 
-        draw_text(f"Price:{all_cars['corolla']['price']}", text_font, (0, 0, 0), 80, 435)
         draw_text(f"Price:{all_cars['wrx']['price']}", text_font, (0, 0, 0), 320, 435)
         draw_text(f"Price:{all_cars['911']['price']}", text_font, (0, 0, 0), 580, 435)
 
-        dollar_sign = pygame.image.load('dollar.png')
-        screen.blit(dollar_sign, (0, 455))
-        draw_text((str(total_coins)), text_font, (255, 255, 255), 50, 458)
+        draw_text(f"{all_cars['corolla']['brand']} {all_cars['corolla']['model']}", text_font, (0, 0, 0), 20, 180)
+        draw_text(f"{all_cars['wrx']['brand']} {all_cars['wrx']['model']}", text_font, (0, 0, 0), 340, 180)
+        draw_text(f"{all_cars['911']['brand']} {all_cars['911']['model']}", text_font, (0, 0, 0), 580, 180)
+
 
         # Draw the button and check for clicks
         if play_btn.draw():
-            print("play123")
             play()
             running = False
         elif menu_btn.draw():
-            print("menu")
             menu(coins)
             running = False
-        # Corolla buttons
-        elif corolla_buy_btn.draw():
-            price, owned, current = buy_car("corolla gen 12")
-            if owned == True:
-                print("You already own the corolla")
-            if coins < price:
-                print("Not enough coins")
-                draw_text("Not enough coins", text_font, (0, 0, 0), 200, 150)
-            if owned == False and coins >= price:
-                owned = True
-                coins -= price
-                print("car bought")
-                draw_text("Car bought", text_font, (0, 0, 0), 200, 150)
-            all_cars["corolla"]["owned"] = owned
+        # Corolla button
         elif corolla_select_btn.draw():
             price, owned, current = buy_car("corolla gen 12")
             if owned == True:
                 current = True
-                print("current")
-                draw_text("Car selected", text_font, (0, 0, 0), 200, 150)
-            else:
-                print("You don't own this car")
-                draw_text("You don't own this car", text_font, (0, 0, 0), 200, 150)
+                print("Car selected")
             all_cars["corolla"]["current"] = current
             all_cars["wrx"]["current"] = False
             all_cars["911"]["current"] = False
@@ -452,25 +401,20 @@ def cars(coins, total_coins):
             price, owned, current = buy_car("wrx sti")
             if owned == True:
                 print("You already own this car")
-                draw_text("You already own this car", text_font, (0, 0, 0), 200, 150)
-            if coins < price:
+            if total_coins < price:
                 print("Not enough coins")
-                draw_text("Not enough coins", text_font, (0, 0, 0), 200, 150)
-            if owned == False and coins >= price:
+            if owned == False and total_coins >= price:
                 owned = True
-                coins -= price
+                total_coins -= price
                 print("car bought")
-                draw_text("Car bought", text_font, (0, 0, 0), 200, 150)
             all_cars["wrx"]["owned"] = owned
         elif wrx_select_btn.draw():
             price, owned, current = buy_car("wrx sti")
             if owned == True:
                 current = True
-                print("current")
-                draw_text("Car selected", text_font, (0, 0, 0), 200, 150)
+                print("Car selected")
             else:
                 print("You don't own this car")
-                draw_text("You don't own this car", text_font, (0, 0, 0), 200, 150)
             all_cars["corolla"]["current"] = False
             all_cars["wrx"]["current"] = current
             all_cars["911"]["current"] = False
@@ -479,56 +423,34 @@ def cars(coins, total_coins):
             price, owned, current = buy_car("911 GT3 RS")
             if owned == True:
                 print("You already own this car")
-                draw_text("You already own this car", text_font, (0, 0, 0), 200, 150)
-            if coins < price:
+            if total_coins < price:
                 print("Not enough coins")
-                draw_text("Not enough coins", text_font, (0, 0, 0), 200, 150)
-            if owned == False and coins >= price:
+            if owned == False and total_coins >= price:
                 owned = True
-                coins -= price
+                total_coins -= price
                 print("car bought")
-                draw_text("Car bought", text_font, (0, 0, 0), 200, 150)
             all_cars["911"]["owned"] = owned
         elif _911_select_btn.draw():
             price, owned, current = buy_car("911 GT3 RS")
             if owned == True:
                 current = True
-                print("current")
-                draw_text("Car selected", text_font, (0, 0, 0), 200, 150)
+                print("Car Selected")
             else:
                 print("You don't own this car")
-                draw_text("You don't own this car", text_font, (0, 0, 0), 200, 150)
             all_cars["corolla"]["current"] = False
             all_cars["wrx"]["current"] = False
             all_cars["911"]["current"] = current
 
+        dollar_sign = pygame.image.load('dollar.png')
+        screen.blit(dollar_sign, (0, 455))
+        draw_text((str(total_coins)), text_font, (255, 255, 255), 50, 458)
+
         # Update display
         pygame.display.flip()
 
-    run()
-    return coins, owned, current
+    return total_coins, owned, current
 
-
-def run():
-    while True:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-            elif event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    pygame.quit()
-                elif event.key == K_c:
-                    cars(coins, total_coins)
-                elif event.key == K_m:
-                    menu(coins)
-                elif event.key == K_p:
-                    play()
-
-
-file = open("saved.txt", "w")
-file.write(str(total_coins))
-file.close
-
+print("Welcome to my car game \nKeyboard shortcuts are c for cars, m for menu, p for play \nUse arrows to move car")
 menu(coins)
 
 pygame.quit()
