@@ -1,5 +1,7 @@
 ''''Docstring
-Car game, instructions for playing and game messages will show in the console
+Name: Olivia Woollett
+
+Car game, instructions for playing and game messages will show in the console.
 '''
 
 # Imports
